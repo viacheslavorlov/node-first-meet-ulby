@@ -4,7 +4,7 @@
   "description": "first time usage of node",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env PORT=5000 node index.js"
+    "start": " node index.js"
   },
   "keywords": [
     "node",
@@ -15,6 +15,7 @@
   "dependencies": {
     "chalk": "^5.0.1",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.0.2",
     "express": "^4.18.1"
   },
   "type": "module",

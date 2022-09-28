@@ -33,5 +33,3 @@ console.log(__dirname, require)
 // 	1000000, 64, 'sha512',
 // 	() => console.log('6 end ', Date.now() - start))
 
-console.log(process.pid);
-console.log(process.env);
