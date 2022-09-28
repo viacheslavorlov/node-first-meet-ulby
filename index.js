@@ -1,7 +1,7 @@
 import path from 'path';
 import chalk from 'chalk';
-import text from "./data.js";
-import {createRequire} from 'node:module';
+import text from './data.js';
+import {createRequire} from 'module';
 
 const require = createRequire(import.meta.url);
 const __dirname = path.resolve();
@@ -33,3 +33,4 @@ console.log(__dirname, require)
 // 	1000000, 64, 'sha512',
 // 	() => console.log('6 end ', Date.now() - start))
 
+console.log(process.env.PORT);

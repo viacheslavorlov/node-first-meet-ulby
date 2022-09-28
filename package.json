@@ -4,7 +4,7 @@
   "description": "first time usage of node",
   "main": "index.js",
   "scripts": {
-    "start": " node index.js"
+    "start": "node ./lessions/process"
   },
   "keywords": [
     "node",
