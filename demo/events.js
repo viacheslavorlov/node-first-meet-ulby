@@ -14,7 +14,7 @@ import data from "../data.js";
 // 	emitter.emit('anything', {b: 2})
 // }, 1500)
 
-class Dicpatcher extends EventEmitter {
+class Dispatcher extends EventEmitter {
 	subscribe(eventName, cb) {
 		console.log('[subscribe...]')
 		this.on(eventName, cb)
@@ -26,8 +26,8 @@ class Dicpatcher extends EventEmitter {
 	}
 }
 
-const dis = new Dicpatcher();
-
+const dis = new Dispatcher();
+// subscribe вызывается первым иначе dispatch не сработает
 dis.subscribe('aa', data => {
 	console.log('ON: aa ', data)
 })

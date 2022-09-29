@@ -1,14 +1,16 @@
 import path from 'path';
+import fs from 'fs';
 import chalk from 'chalk';
 import text from './data.js';
 import {createRequire} from 'module';
+import http from "http";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.resolve();
 const crypto = require('crypto');
 
-console.log(chalk.red(text));
-console.log(__dirname, require)
+// console.log(chalk.red(text));
+// console.log(__dirname, require)
 
 //* проверка многопоточности node.js
 
@@ -34,3 +36,45 @@ console.log(__dirname, require)
 // 	() => console.log('6 end ', Date.now() - start))
 
 console.log(process.env.PORT);
+
+
+//* создание сервера
+
+const server = http.createServer((request, response) => {
+	//* неоптимизированный вариант передачи файов от сервера
+	// if (request.url === '/') {
+	// 	fs.readFile(path.join(__dirname, 'public', 'index.html'), (err, data) => {
+	// 		if (err) {
+	// 			throw err;
+	// 		}
+	// 		response.writeHead(200, {
+	// 			'Content-Type': 'text/html'
+	// 		})
+	// 		response.end(data);
+	// 	})
+	// } else if (request.url === '/contact'){
+	// 	fs.readFile(path.join(__dirname, 'public', 'contact.html'), (err, data) => {
+	// 		if (err) {
+	// 			throw err;
+	// 		}
+	// 		response.writeHead(200, {
+	// 			'Content-Type': 'text/html'
+	// 		})
+	// 		response.end(data);
+	// 	})
+	// }
+	let filePath = path.join(__dirname, 'public', request.url === '/' ? 'index.html' : request.url)
+	console.log(filePath)
+	fs.readFile(filePath, (err, data) => {
+		if (err) {
+			throw err;
+		}
+
+	})
+	res.end()
+
+});
+
+server.listen(3000, () => {
+	console.log('server has been started...')
+})
