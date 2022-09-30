@@ -28,21 +28,21 @@ import fsPromise from 'fs/promises';
 
 //? создание файла  (при существовании файла с этим названием и адресом - перезапишет его с указанными данными -
 //? предыдущие данные будут удалены)
-fs.writeFile(path.join(__dirname, 'test.txt'), 'TEST test TEST', (err) => {
-	if (err) {
-		console.log(err)
-		throw err
-	}
-	console.log('file created')
-})
+// fs.writeFile(path.join(__dirname, 'test.txt'), 'TEST test TEST', (err) => {
+// 	if (err) {
+// 		console.log(err)
+// 		throw err
+// 	}
+// 	console.log('file created')
+// })
 //?  дописать данные в существующий файл
-fs.appendFile(path.join(__dirname, 'test.txt'), '\nsecond Test@2', (err) => {
-	if (err) {
-		console.log(err)
-		throw err
-	}
-	console.log('file: data added into file')
-})
+// fs.appendFile(path.join(__dirname, 'test.txt'), '\nsecond Test@2', (err) => {
+// 	if (err) {
+// 		console.log(err)
+// 		throw err
+// 	}
+// 	console.log('file: data added into file')
+// })
 
 
 //? асинхронная функция для создания или перезаписи файла на основании Promise
@@ -64,12 +64,18 @@ const addDataToFileAsync = async (path, data) => {
 		resolve();
 	}));
 }
+//? вызов асинхронной функции создания и дописывания файла
+//
+// writeFileAsync(path.join(__dirname, 'testAsync.txt'), 'Test ASYNC')
+// 	.then(() => addDataToFileAsync(path.join(__dirname, 'testAsync.txt'), '\n 1-ASYNC'))
+// 	.then(() => addDataToFileAsync(path.join(__dirname, 'testAsync.txt'), '\n 2-ASYNC'))
+// 	.then(() => addDataToFileAsync(path.join(__dirname, 'testAsync.txt'), '\n 3-ASYNC'))
+// 	.catch(err => console.log(err))
 
-writeFileAsync(path.join(__dirname, 'testAsync.txt'), 'Test ASYNC')
-	.then(() => addDataToFileAsync(path.join(__dirname, 'testAsync.txt'), '\n 1-ASYNC'))
-	.then(() => addDataToFileAsync(path.join(__dirname, 'testAsync.txt'), '\n 2-ASYNC'))
-	.then(() => addDataToFileAsync(path.join(__dirname, 'testAsync.txt'), '\n 3-ASYNC'))
+fsPromise.mkdir(path.join(__dirname, 'testPromise'))
+	.then(() => console.log('папка создана'))
+	.catch(err => console.log(err));
+fsPromise.writeFile(path.join(__dirname, 'testPromise', 'testPromise.txt'), 'testPromise TEST TEST Test')
+	.then(() => console.log('файл создан'))
+	.then(() => fsPromise.appendFile(path.join(__dirname, 'testPromise', 'testPromise.txt'), '\n2222222 test'))
 	.catch(err => console.log(err))
-
-fsPromise.mkdir(path.join(__dirname, 'testPromise')).then().catch(err => console.log(err));
-fsPromise.writeFile(path.join(__dirname, 'testPromise', 'testPromise.txt'))
