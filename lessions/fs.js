@@ -1,7 +1,11 @@
 import fs from "fs"
 import path from "path";
+import dotenv from  'dotenv';
+dotenv.config({path: '../.env'});
+
 const __dirname = path.resolve();
 import fsPromise from 'fs/promises';
+import data from "../data.js";
 
 
 //? создание папки
@@ -45,7 +49,7 @@ import fsPromise from 'fs/promises';
 // })
 
 
-//? асинхронная функция для создания или перезаписи файла на основании Promise
+//? асинхронная функция для СОЗДАНИЯ ИЛИ ПЕРЕЗАПИСИ файла на основании Promise
 const writeFileAsync = async (path, data) => {
 	return new Promise((resolve, reject) => fs.writeFile(path, data, (err) => {
 		if (err) {
@@ -55,7 +59,7 @@ const writeFileAsync = async (path, data) => {
 	}));
 }
 
-//? асинхронная функция для дописывания файла на основании Promise
+//? асинхронная функция для ДОПИСЫВАНИЯ файла на основании Promise
 const addDataToFileAsync = async (path, data) => {
 	return new Promise((resolve, reject) => fs.appendFile(path, data, (err) => {
 		if (err) {
@@ -64,18 +68,61 @@ const addDataToFileAsync = async (path, data) => {
 		resolve();
 	}));
 }
+
+//? асинхронная функция для ЧТЕНИЯ файла на основании Promise
+const readFileAsync = async (path) => {
+	return new Promise((resolve, reject) => {
+		return fs.readFile(path, {encoding: "utf-8"}, (err, data) => {
+			//? 1 аргумент - ошибка, 2 аргумент - данные файла
+			//? (буфер - если не указана кодировка, иначе - строка)
+			if (err) {
+				return reject(err.message);
+			}
+			resolve(data);
+		});
+	});
+};
+
+//? асинхронная функция для УДАЛЕНИЯ файла на основании Promise
+const removeFileAsync = async (path) => {
+	return new Promise((resolve, reject) => fs.rm(path, (err) => {
+		if (err) {
+			return reject(err.message);
+		}
+		resolve()
+	}))
+};
+
 //? вызов асинхронной функции создания и дописывания файла
-//
+
 // writeFileAsync(path.join(__dirname, 'testAsync.txt'), 'Test ASYNC')
 // 	.then(() => addDataToFileAsync(path.join(__dirname, 'testAsync.txt'), '\n 1-ASYNC'))
 // 	.then(() => addDataToFileAsync(path.join(__dirname, 'testAsync.txt'), '\n 2-ASYNC'))
 // 	.then(() => addDataToFileAsync(path.join(__dirname, 'testAsync.txt'), '\n 3-ASYNC'))
+// 	.then(() => readFileAsync(path.join(__dirname, 'testAsync.txt')))
+// 	.then(data => console.log(data))
+// 	.then(() => removeFileAsync(path.join(__dirname, 'testAsync.txt')))
 // 	.catch(err => console.log(err))
 
-fsPromise.mkdir(path.join(__dirname, 'testPromise'))
-	.then(() => console.log('папка создана'))
-	.catch(err => console.log(err));
-fsPromise.writeFile(path.join(__dirname, 'testPromise', 'testPromise.txt'), 'testPromise TEST TEST Test')
-	.then(() => console.log('файл создан'))
-	.then(() => fsPromise.appendFile(path.join(__dirname, 'testPromise', 'testPromise.txt'), '\n2222222 test'))
-	.catch(err => console.log(err))
+
+//? работа на встроенных промисах нужно импортировать !!!!fsPromise!!!!!
+// fsPromise.mkdir(path.join(__dirname, 'testPromise'))
+// 	.then(() => console.log('папка создана'))
+// 	.catch(err => console.log(err));
+// fsPromise.writeFile(path.join(__dirname, 'testPromise', 'testPromise.txt'), 'testPromise TEST TEST Test')
+// 	.then(() => console.log('файл создан'))
+// 	.then(() => fsPromise.appendFile(path.join(__dirname, 'testPromise', 'testPromise.txt'), '\n2222222 test'))
+// 	.catch(err => console.log(err))
+
+// Задача: через переменную окружения передать текст. записать его в файл, считать, посчитать количество слов,
+// записать количество слов в новый файл. Первый файл удалить.
+
+const lorem = process.env.TEXT || '';
+console.log(lorem)
+
+writeFileAsync(path.join(__dirname, 'lorem.txt'), lorem)
+	.then(() => readFileAsync(path.join(__dirname, 'lorem.txt')))
+	.then(data => data.split(' ').length.toString())
+	.then((len) => writeFileAsync(path.join(__dirname, 'count.txt'), len))
+	.then(() => removeFileAsync(path.join(__dirname, 'lorem.txt')))
+//решено верно самостоятельно
