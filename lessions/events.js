@@ -15,3 +15,11 @@ if (MESSAGE) {
 	emitter.emit('message', 'Сообщение не указано')
 }
 
+//? генерирует событие только единажды
+// emitter.once('event', (data, second, third) => callback)
+
+//? удалять все слушатели событий
+emitter.removeAllListeners()
+
+//? удалить один слушатель события
+emitter.removeListener('event', callback)
